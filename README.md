@@ -41,7 +41,7 @@ Status: `Not started`, `In progress`, `Done`. Titles are my short names for the 
 |---|---|---|---|
 | 1.1 | [Interface and cable issues](1.1-interface-and-cable-issues/notes.md) | Done | E, C |
 | 1.2 | [Hypervisors, virtual machines and containers](1.2-hypervisors-vms-and-containers/notes.md) | Done | E |
-| 1.3 | IPv4 addressing and subnetting | Done | E, C |
+| 1.3 | [IPv4 addressing and subnetting](1.3-ipv4-troubleshooting) | Done | E, C |
 | 1.4 | IPv6 addressing | Not started | |
 | 1.5 | Wireless principles | Not started | |
 | 1.6 | Wired and wireless client connectivity | Not started | |
