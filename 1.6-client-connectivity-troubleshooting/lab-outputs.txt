@@ -1,0 +1,107 @@
+TOPIC 1.6 - RAW PACKET TRACER OUTPUTS (copied from my lab)
+Lab: R1 G0/0 192.168.20.1/24, SW1, PC1 192.168.20.10, PC2 192.168.20.11, Server 192.168.20.100
+(DNS A record www.test.com -> 192.168.20.100). All static IPs.
+
+============================================================
+1. BASELINE: PC1 ipconfig /all (good state)
+============================================================
+   IPv4 Address....................: 192.168.20.10
+   Subnet Mask.....................: 255.255.255.0
+   Default Gateway.................: ::
+                                     192.168.20.1
+   DHCP Servers....................: 0.0.0.0
+   DNS Servers.....................: ::
+                                     192.168.20.100
+
+(The "::" lines are the empty IPv6 values. The Bluetooth block is a fake extra card in Packet Tracer.)
+
+PC1> ping 192.168.20.100
+Reply from 192.168.20.100: bytes=32 time=12ms TTL=128
+Reply from 192.168.20.100: bytes=32 time<1ms TTL=128
+Reply from 192.168.20.100: bytes=32 time<1ms TTL=128
+Reply from 192.168.20.100: bytes=32 time<1ms TTL=128
+Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)
+
+============================================================
+2. BREAK A (first try): PC1 mask 255.255.255.252
+============================================================
+   IPv4 Address....................: 192.168.20.10
+   Subnet Mask.....................: 255.255.255.252
+   Default Gateway.................: 192.168.20.1
+
+PC1> ping 192.168.20.100
+Reply from 192.168.20.100 x4, 0% loss   (still worked!)
+
+PC1> tracert 192.168.20.100
+  1   0 ms      0 ms      0 ms      192.168.20.1
+  2   13 ms     0 ms      0 ms      192.168.20.100
+Trace complete.
+
+Lesson: the packet went through the router. A wrong setting can still show a working ping.
+Packet Tracer may be more lenient than a real PC (not confirmed).
+
+============================================================
+3. BREAK A (redone): PC1 IP on the wrong network
+============================================================
+   IPv4 Address....................: 192.168.30.10
+   Subnet Mask.....................: 255.255.255.0
+   Default Gateway.................: 192.168.20.1
+
+PC1> ping 192.168.20.100
+Request timed out. x4   (100% loss)
+
+PC1> ping 192.168.20.1
+Request timed out. x4   (100% loss)
+
+Fix: IP back to 192.168.20.10, mask 255.255.255.0
+PC1> ping 192.168.20.1 and ping 192.168.20.100: both reply.
+
+============================================================
+4. BREAK B: PC2 DNS server 192.168.20.99
+============================================================
+   IPv4 Address....................: 192.168.20.11
+   Default Gateway.................: 192.168.20.1
+   DNS Servers.....................: 192.168.20.99
+
+PC2> ping 192.168.20.1       -> 4 replies, TTL=255
+PC2> ping 192.168.20.100     -> 4 replies, TTL=128
+PC2> ping www.test.com       -> Ping request could not find host www.test.com. Please check the name and try again.
+
+Fix: DNS server 192.168.20.100
+   DNS Servers.....................: 192.168.20.100
+
+============================================================
+5. BREAK C: shutdown on SW1 Fa0/2
+============================================================
+SW1# show interfaces status
+Fa0/2                        disabled 1          auto    auto  10/100BaseTX
+
+PC2> ping 192.168.20.1       -> Request timed out. x4 (100% loss)
+(ipconfig on PC2 still showed the same IP, mask, gateway and DNS)
+
+Fix on SW1:
+Switch> enable
+Switch# configure terminal
+Switch(config)# interface fa0/2
+Switch(config-if)# no shutdown
+Switch(config-if)# end
+
+============================================================
+6. FINAL PROOF (Breaks B and C fixed), on PC2
+============================================================
+PC2> ping 192.168.20.1
+Reply from 192.168.20.1: bytes=32 time=15ms TTL=255
+Reply from 192.168.20.1: bytes=32 time<1ms TTL=255
+Reply from 192.168.20.1: bytes=32 time<1ms TTL=255
+Reply from 192.168.20.1: bytes=32 time<1ms TTL=255
+Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)
+
+PC2> ping www.test.com
+Pinging 192.168.20.100 with 32 bytes of data:
+Reply from 192.168.20.100: bytes=32 time<1ms TTL=128
+Reply from 192.168.20.100: bytes=32 time=1ms TTL=128
+Reply from 192.168.20.100: bytes=32 time<1ms TTL=128
+Reply from 192.168.20.100: bytes=32 time<1ms TTL=128
+Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)
+
+(The ping line shows the IP the name turned into: DNS works.)
