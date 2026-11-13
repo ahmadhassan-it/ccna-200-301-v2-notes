@@ -44,7 +44,7 @@ Status: `Not started`, `In progress`, `Done`. Titles are my short names for the 
 | 1.3 | [IPv4 addressing and subnetting](1.3-ipv4-troubleshooting) | Done | E, C |
 | 1.4 | [IPv6 troubleshooting](1.4-ipv6-troubleshooting) | Done | (E, C, no T yet)
 | 1.5 | [Wireless principles](1.5-wireless-fundamentals) | Done | (E, C, T)
-| 1.6 | Wired and wireless client connectivity | Not started | |
+| 1.6 | [Client connectivity troubleshooting](1.6-client-connectivity-troubleshooting) | Done | (E, C, T)
 | 1.7 | DHCPv4 (client, server, relay) | Not started | |
 
 ### 2.0 Switching and Network Access (25%)
