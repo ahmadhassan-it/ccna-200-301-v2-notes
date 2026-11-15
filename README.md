@@ -45,7 +45,7 @@ Status: `Not started`, `In progress`, `Done`. Titles are my short names for the 
 | 1.4 | [IPv6 troubleshooting](1.4-ipv6-troubleshooting) | Done | (E, C, no T yet)
 | 1.5 | [Wireless principles](1.5-wireless-fundamentals) | Done | (E, C, T)
 | 1.6 | [Client connectivity troubleshooting](1.6-client-connectivity-troubleshooting) | Done | (E, C, T)
-| 1.7 | DHCPv4 (client, server, relay) | Not started | |
+- [1.7 DHCPv4: server, relay and client](1.7-dhcpv4/) - DHCP pool on R2, relay on R1, and the missing return route fault
 
 ### 2.0 Switching and Network Access (25%)
 
