@@ -1,0 +1,14 @@
+! R2 (DHCP server). Replace with your real "show running-config" output before publishing.
+! Check your route: it may be a default route instead of the specific one below.
+interface GigabitEthernet0/0
+ ip address 192.168.20.100 255.255.255.0
+ no shutdown
+!
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+!
+ip dhcp pool VLAN10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
+!
+ip route 192.168.10.0 255.255.255.0 192.168.20.1
